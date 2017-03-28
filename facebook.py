@@ -516,7 +516,7 @@ def get_access_token_from_code(code, redirect_uri, app_id, app_secret):
     response = urllib.urlopen("https://graph.facebook.com/oauth/access_token" +
                               "?" + urllib.urlencode(args)).read()
     response = _parse_json(response)
-    if "access_token" in query_str:
+    if "access_token" in response:
         return {"access_token": response["access_token"]}
     else:
         raise GraphAPIError(response)

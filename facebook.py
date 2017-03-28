@@ -380,14 +380,11 @@ class GraphAPI(object):
         response = urllib.urlopen("https://graph.facebook.com/oauth/"
                                   "access_token?" +
                                   urllib.urlencode(args)).read()
-        query_str = parse_qs(response)
-        if "access_token" in query_str:
-            result = {"access_token": query_str["access_token"][0]}
-            if "expires" in query_str:
-                result["expires"] = query_str["expires"][0]
-            return result
+        response_json = _parse_json(response)
+        if "access_token" in response_json:
+            return {"access_token": response_json["access_token"]}
         else:
-            response = json.loads(response)
+            response = _parse_json(response)
             raise GraphAPIError(response)
 
 

@@ -515,14 +515,10 @@ def get_access_token_from_code(code, redirect_uri, app_id, app_secret):
     # that the response is a key-value pair, and not JSON.
     response = urllib.urlopen("https://graph.facebook.com/oauth/access_token" +
                               "?" + urllib.urlencode(args)).read()
-    query_str = parse_qs(response)
+    response = _parse_json(response)
     if "access_token" in query_str:
-        result = {"access_token": query_str["access_token"][0]}
-        if "expires" in query_str:
-            result["expires"] = query_str["expires"][0]
-        return result
+        return {"access_token": response["access_token"]}
     else:
-        response = json.loads(response)
         raise GraphAPIError(response)
 
 
